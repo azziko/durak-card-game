@@ -4,7 +4,6 @@ namespace Domain;
 
 class Player{
     private List<Card> hand = new List<Card>();
-    public bool isAttacking { get; set; }
 
     public List<Card> GetCards(){
         return hand;
