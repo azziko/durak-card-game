@@ -77,6 +77,7 @@ class Game{
 
     private void startNewGame(){
         deck = new Deck();
+        bout = new Bout();
 
         Card? lowestTramp = null;
         for(int i = 0; i < players.Count; i++){
@@ -118,25 +119,49 @@ class Game{
         }
     }
 
+    private void nextPlayerClockWise(int n){
+        activePlayer = (activePlayer + n) % players.Count;
+    }
+
     private bool makeMove(Card? card){
         Player currentPlayer = bout.isAttackersTurn() ? players[activePlayer] : players[(activePlayer + 1)%players.Count]; 
-        //TODO: Play the cards from hand of active player
-        //TODO: Add cards to discard pile if some
+
+        if(card == null){
+            //TODO: draw cards to players
+            bool wasAttackersTurn = bout.isAttackersTurn();
+            List<Card> cardsCleared = bout.ClearBout();
+
+            if(wasAttackersTurn){
+                discardPile.AddRange(cardsCleared);
+                nextPlayerClockWise(1);
+            } else {
+                currentPlayer.AddCards(cardsCleared);
+                nextPlayerClockWise(2);
+            }
+
+            return true;
+        }
+
+        bool wasRemoved = currentPlayer.RemoveCard(card);
+        if(!wasRemoved){
+            return false;
+        }
+        bout.PlayCard(card);
 
         return true;
     }
 
     public List<Card> GetValidMoves(){
-        List<Card> validPlays = new List<Card>();
+        List<Card> validMoves = new List<Card>();
         Player currentPlayer = bout.isAttackersTurn() ? players[activePlayer] : players[(activePlayer + 1)%players.Count];
 
         foreach(Card card in currentPlayer.GetCards()){
             (bool isValid, string mes) = isValidMove(card);
             if(isValid){
-                validPlays.Add(card);
+                validMoves.Add(card);
             }
         }
         
-        return validPlays;
+        return validMoves;
     }
 }
