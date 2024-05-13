@@ -12,4 +12,8 @@ class Player{
     public void AddCards(List<Card> cardsToAdd){
         hand.AddRange(cardsToAdd);
     }
+
+    public bool RemoveCard(Card card){
+        return hand.Remove(card);
+    }
 }
