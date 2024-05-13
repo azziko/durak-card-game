@@ -33,6 +33,7 @@ class Bout{
         
         AttackingCards = new List<Card>();
         DefendingCards = new List<Card>();
+        isAttacking = true;
 
         return cardsCleared;
     }
