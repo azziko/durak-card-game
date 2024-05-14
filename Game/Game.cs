@@ -7,7 +7,7 @@ using System.Linq;
 namespace Game;
 
 class Game{
-    private Random rand = new Random((int)(DateTime.Now.Ticks));
+    public Random Rand = new Random((int)(DateTime.Now.Ticks));
 
     private Bout bout;
     private List<Player> players;
@@ -17,6 +17,9 @@ class Game{
 
     public Game(List<Player> _players){
         players = _players;
+        deck = new Deck();
+        bout = new Bout();
+        
         startNewGame();
     }
 
@@ -71,14 +74,9 @@ class Game{
                 return (true, "");
             }
         }
-
-        return (false, "Unknown move");
     }
 
     private void startNewGame(){
-        deck = new Deck();
-        bout = new Bout();
-
         Card? lowestTramp = null;
         for(int i = 0; i < players.Count; i++){
             players[i].AddCards(deck.Draw(6));
@@ -99,7 +97,7 @@ class Game{
         }
 
         if(lowestTramp == null){
-            activePlayer = rand.Next(players.Count);
+            activePlayer = Rand.Next(players.Count);
         }
     }
 
@@ -111,7 +109,11 @@ class Game{
             }
 
             if(!makeMove(card)){
-                throw new InvalidMoveException($"No {card.ToString()} in your hand");
+                if(card == null){
+                    throw new InvalidMoveException($"Something went wrong");
+                } else {
+                    throw new InvalidMoveException($"No {card} in your hand");
+                }
             }
         }
         catch (InvalidMoveException exceptInv){
@@ -163,8 +165,8 @@ class Game{
         return true;
     }
 
-    public List<Card> GetValidMoves(){
-        List<Card> validMoves = new List<Card>();
+    public List<Card?> GetValidMoves(){
+        List<Card?> validMoves = new List<Card?>{null};
         Player currentPlayer = bout.isAttackersTurn() ? players[activePlayer] : players[(activePlayer + 1)%players.Count];
 
         foreach(Card card in currentPlayer.GetCards()){

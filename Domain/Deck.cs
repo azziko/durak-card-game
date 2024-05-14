@@ -7,7 +7,7 @@ namespace Domain;
 
 class Deck {
     private List<Card> cards;
-    private Random rand = new Random((int)(DateTime.Now.Ticks));
+    private Random rand = new Random((int)DateTime.Now.Ticks);
     public ECardSuit Tramp;
 
     public Deck(){
@@ -18,7 +18,7 @@ class Deck {
                 cards.Add(new Card(){
                     Suit = _suit,
                     Val = _val,
-                    Score = (int)(_val),
+                    Score = (int)_val,
                 });
             }
         }

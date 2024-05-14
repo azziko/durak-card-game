@@ -1,7 +1,5 @@
 using Domain;
 
-namespace Game;
-
 class Bout{
     public List<Card> AttackingCards;
     public List<Card> DefendingCards;
@@ -16,7 +14,7 @@ class Bout{
         return isAttacking;
     }
 
-    public void PlayCard(Card? card){
+    public void PlayCard(Card card){
         if(isAttacking){
             AttackingCards.Add(card);
         } else {
