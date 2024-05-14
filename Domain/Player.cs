@@ -9,6 +9,10 @@ class Player{
         return hand;
     }
 
+    public int CountCards(){
+        return hand.Count;
+    }
+
     public void AddCards(List<Card> cardsToAdd){
         hand.AddRange(cardsToAdd);
     }

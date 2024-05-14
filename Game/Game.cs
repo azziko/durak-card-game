@@ -119,6 +119,17 @@ class Game{
         }
     }
 
+    private void refillHands(){
+        for(int i = 0; i < players.Count; i++){
+            Player currentPlayer = players[(activePlayer + i)%players.Count];
+            int cardsInHand = currentPlayer.CountCards();
+
+            if(cardsInHand < 6){
+                currentPlayer.AddCards(deck.Draw(6 - cardsInHand));
+            }
+        }
+    }
+
     private void nextPlayerClockWise(int n){
         activePlayer = (activePlayer + n) % players.Count;
     }
@@ -127,7 +138,6 @@ class Game{
         Player currentPlayer = bout.isAttackersTurn() ? players[activePlayer] : players[(activePlayer + 1)%players.Count]; 
 
         if(card == null){
-            //TODO: draw cards to players
             bool wasAttackersTurn = bout.isAttackersTurn();
             List<Card> cardsCleared = bout.ClearBout();
 
@@ -138,6 +148,8 @@ class Game{
                 currentPlayer.AddCards(cardsCleared);
                 nextPlayerClockWise(2);
             }
+
+            refillHands();
 
             return true;
         }
