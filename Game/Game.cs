@@ -43,7 +43,7 @@ class Game{
                 ){
                     return (true, "");
                 } else {
-                    return (false, $"card {card.ToString()} does not match any Value on board");
+                    return (false, $"card {card} does not match any Value on board");
                 }
             }
         } else {
@@ -54,21 +54,21 @@ class Game{
                     cardtoBeat.Suit == deck.Tramp &&
                     cardtoBeat.Val > card.Val
                 ){
-                    return(false, $"{cardtoBeat.ToString()} is not beatable by {card.ToString()}");
+                    return(false, $"{cardtoBeat} is not beatable by {card}");
                 } else {
                     return(true, "");
                 }
             } else {
                 if(cardtoBeat.Suit == deck.Tramp){
-                    return(false, $"{cardtoBeat.ToString()} is not beatable by {card.ToString()}");
+                    return(false, $"{cardtoBeat} is not beatable by {card}");
                 }
 
                 if(cardtoBeat.Suit != card.Suit){
-                    return(false, $"{cardtoBeat.ToString()} and {card.ToString()} don't much the suits");
+                    return(false, $"{cardtoBeat} and {card} don't much the suits");
                 }
 
                 if(cardtoBeat.Val > card.Val){
-                    return(false, $"{cardtoBeat.ToString()} has higher value than {card.ToString()}");
+                    return(false, $"{cardtoBeat} has higher value than {card}");
                 }
 
                 return (true, "");
@@ -101,7 +101,10 @@ class Game{
         }
     }
 
-    public void Move(Card? card){
+    public void Move(){
+        Player currentPlayer = bout.isAttackersTurn() ? players[activePlayer] : players[(activePlayer + 1)%players.Count]; 
+        Card? card = currentPlayer.ChooseMove(this);
+
         try{
             (bool isValid, string message)= isValidMove(card);
             if(!isValid){
@@ -170,7 +173,7 @@ class Game{
         Player currentPlayer = bout.isAttackersTurn() ? players[activePlayer] : players[(activePlayer + 1)%players.Count];
 
         foreach(Card card in currentPlayer.GetCards()){
-            (bool isValid, string mes) = isValidMove(card);
+            (bool isValid, string _) = isValidMove(card);
             if(isValid){
                 validMoves.Add(card);
             }
