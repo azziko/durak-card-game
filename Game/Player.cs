@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Domain;
+using Domain.Enums;
 
 namespace Game;
 
@@ -9,7 +10,7 @@ abstract class Player{
     //Player should not know anything about the game, except open info.
     //However, it is being passed for simplicity of implementation sake.
     //TODO: change it, so the Player receives a clone state.
-    public abstract Card? ChooseMove(Game game);
+    public abstract (EPlayerAction, Card?) ChooseMove(Game game);
 
     public List<Card> GetCards(){
         return hand;

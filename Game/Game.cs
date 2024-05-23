@@ -103,8 +103,9 @@ class Game{
 
     public void Move(){
         Player currentPlayer = bout.isAttackersTurn() ? players[activePlayer] : players[(activePlayer + 1)%players.Count]; 
-        Card? card = currentPlayer.ChooseMove(this);
+        (EPlayerAction action, Card? card) = currentPlayer.ChooseMove(this);
 
+        //TODO: do smth based on the action(Implement Exit and Restart)
         try{
             (bool isValid, string message)= isValidMove(card);
             if(!isValid){

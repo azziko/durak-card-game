@@ -1,11 +1,15 @@
 using System.Collections.Generic;
 using Domain;
+using Domain.Enums;
 
 namespace Game;
 class RandomAgent : Player {
-    public override Card? ChooseMove(Game game) {
+    public override (EPlayerAction, Card?) ChooseMove(Game game) {
         List<Card?> validMoves = game.GetValidMoves();
 
-        return validMoves[game.Rand.Next(validMoves.Count)];
+        return (
+            EPlayerAction.Move, 
+            validMoves[game.Rand.Next(validMoves.Count)]
+        );
     }
 }
