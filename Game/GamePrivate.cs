@@ -6,22 +6,12 @@ using System.Linq;
 
 namespace Game;
 
-class Game{
-    public Random Rand = new Random((int)(DateTime.Now.Ticks));
-
+partial class Game{
     private Bout bout;
     private List<Player> players;
     private Deck deck;
     private List<Card> discardPile = new List<Card>();
     private int activePlayer = 0;
-
-    public Game(List<Player> _players){
-        players = _players;
-        deck = new Deck();
-        bout = new Bout();
-        
-        startNewGame();
-    }
 
     private (bool, string) isValidMove(Card? card){
         if(card == null){
@@ -101,30 +91,6 @@ class Game{
         }
     }
 
-    public void Move(){
-        Player currentPlayer = bout.isAttackersTurn() ? players[activePlayer] : players[(activePlayer + 1)%players.Count]; 
-        (EPlayerAction action, Card? card) = currentPlayer.ChooseMove(this);
-
-        //TODO: do smth based on the action(Implement Exit and Restart)
-        try{
-            (bool isValid, string message)= isValidMove(card);
-            if(!isValid){
-                throw new InvalidMoveException(message);
-            }
-
-            if(!makeMove(card)){
-                if(card == null){
-                    throw new InvalidMoveException($"Something went wrong");
-                } else {
-                    throw new InvalidMoveException($"No {card} in your hand");
-                }
-            }
-        }
-        catch (InvalidMoveException exceptInv){
-            Console.WriteLine($"Error: {exceptInv.Message}. Please, choose another play");
-        }
-    }
-
     private void refillHands(){
         for(int i = 0; i < players.Count; i++){
             Player currentPlayer = players[(activePlayer + i)%players.Count];
@@ -167,19 +133,5 @@ class Game{
         bout.PlayCard(card);
 
         return true;
-    }
-
-    public List<Card?> GetValidMoves(){
-        List<Card?> validMoves = new List<Card?>{null};
-        Player currentPlayer = bout.isAttackersTurn() ? players[activePlayer] : players[(activePlayer + 1)%players.Count];
-
-        foreach(Card card in currentPlayer.GetCards()){
-            (bool isValid, string _) = isValidMove(card);
-            if(isValid){
-                validMoves.Add(card);
-            }
-        }
-        
-        return validMoves;
     }
 }
