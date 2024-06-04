@@ -94,7 +94,7 @@ partial class Game{
 
     private void refillHands(){
         for(int i = 0; i < players.Count; i++){
-            Player currentPlayer = players[i];
+            Player currentPlayer = players[(activePlayer + i) % players.Count];
             int cardsInHand = currentPlayer.CountCards();
             int deckSize = deck.CardsLeft();
 
