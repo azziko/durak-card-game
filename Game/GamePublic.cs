@@ -27,6 +27,15 @@ partial class Game{
         return bout;
     }
 
+    public bool IsActiveBot(){
+        Player currentPlayer = bout.isAttackersTurn() ? players[activePlayer] : players[(activePlayer + 1)%players.Count]; 
+
+        if(currentPlayer is RandomAgent || currentPlayer is SmartAgent)
+            return true;
+
+        return false;
+    }
+
     public EPlayerAction Move(){
         Player currentPlayer = bout.isAttackersTurn() ? players[activePlayer] : players[(activePlayer + 1)%players.Count]; 
         (EPlayerAction action, Card? card) = currentPlayer.ChooseMove(this);
