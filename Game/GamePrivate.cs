@@ -12,6 +12,7 @@ partial class Game{
     private Deck deck;
     private List<Card> discardPile = new List<Card>();
     private int activePlayer = 0;
+    private int winner = -1;
 
     private (bool, string) isValidMove(Card? card){
         if(card == null){
@@ -37,11 +38,11 @@ partial class Game{
                 }
             }
         } else {
-            Card cardtoBeat = bout.DefendingCards.Last();
+            Card cardtoBeat = bout.AttackingCards.Last();
 
-            if(card.Suit == deck.Tramp){
+            if(card.Suit == deck.Tramp.Suit){
                 if(
-                    cardtoBeat.Suit == deck.Tramp &&
+                    cardtoBeat.Suit == deck.Tramp.Suit &&
                     cardtoBeat.Val > card.Val
                 ){
                     return(false, $"{cardtoBeat} is not beatable by {card}");
@@ -49,7 +50,7 @@ partial class Game{
                     return(true, "");
                 }
             } else {
-                if(cardtoBeat.Suit == deck.Tramp){
+                if(cardtoBeat.Suit == deck.Tramp.Suit){
                     return(false, $"{cardtoBeat} is not beatable by {card}");
                 }
 
@@ -70,7 +71,7 @@ partial class Game{
         Card? lowestTramp = null;
         for(int i = 0; i < players.Count; i++){
             players[i].AddCards(deck.Draw(6));
-            Card? lowestTrampDealt = players[i].GetCards().Where(card => card.Suit == deck.Tramp)
+            Card? lowestTrampDealt = players[i].GetCards().Where(card => card.Suit == deck.Tramp.Suit)
                                     .OrderBy(card => card.Val)
                                     .FirstOrDefault();
 
@@ -93,11 +94,30 @@ partial class Game{
 
     private void refillHands(){
         for(int i = 0; i < players.Count; i++){
-            Player currentPlayer = players[(activePlayer + i)%players.Count];
+            Player currentPlayer = players[i];
             int cardsInHand = currentPlayer.CountCards();
+            int deckSize = deck.CardsLeft();
 
             if(cardsInHand < 6){
-                currentPlayer.AddCards(deck.Draw(6 - cardsInHand));
+                if(6 - cardsInHand > deckSize){
+                    currentPlayer.AddCards(deck.Draw(deckSize));
+                } else {
+                    currentPlayer.AddCards(deck.Draw(6 - cardsInHand));
+                }
+            }
+        }
+    }
+
+    private void checkWinner(){
+        if(deck.CardsLeft() == 0){
+            for(int i = 0; i < players.Count; i++){
+                Player currentPlayer = players[i];
+                int cardsInHand = currentPlayer.CountCards();
+
+                if(cardsInHand == 0){
+                    winner = i;
+                    return;
+                }
             }
         }
     }
@@ -122,6 +142,7 @@ partial class Game{
             }
 
             refillHands();
+            checkWinner();
 
             return true;
         }

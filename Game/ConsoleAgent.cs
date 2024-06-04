@@ -1,13 +1,37 @@
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Domain;
 using Domain.Enums;
 
 namespace Game;
 class ConsoleAgent : Player {
     public override (EPlayerAction, Card?) ChooseMove(Game game) {
-        //TODO: Polling the player for a move until valid one is chosen
-        //Remark: don't print anything, it's View's responsibility
+        List<Card> hand = game.GetHandActivePlayer();
+        while(true){
+            Console.Write("Choose a move (#): ");
+            string input = Console.ReadLine()!;
 
-        return (EPlayerAction.Move, null);
+            if(input == "exit"){
+                return (EPlayerAction.Exit, null);
+            }
+
+            if(input == "skip"){
+                return (EPlayerAction.Move, null);
+            }
+
+            if(Int32.TryParse(input, out int cardPos)){
+                if(cardPos == 0){
+                    return(EPlayerAction.Move, null);
+                }
+
+                if(cardPos > 0 && cardPos < hand.Count + 1){
+                    return (EPlayerAction.Move, hand[cardPos-1]);
+                } else {
+                    Console.WriteLine($"{cardPos} is not in the range of cards in hand ({1}-{hand.Count})");
+                }
+            } else {
+                Console.WriteLine($"{input} is not a valid command");
+            }
+        }
     }
 }

@@ -2,13 +2,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using Domain.Enums;
+using System.Runtime.InteropServices;
 
 namespace Domain;
 
 class Deck {
     private List<Card> cards;
     private Random rand = new Random((int)DateTime.Now.Ticks);
-    public ECardSuit Tramp;
+    public Card Tramp;
 
     public Deck(){
         cards = new List<Card>();
@@ -24,6 +25,10 @@ class Deck {
         }
 
         shuffle();
+    }
+
+    public int CardsLeft(){
+        return cards.Count;
     }
 
     public List<Card> Draw(int n){
@@ -42,7 +47,7 @@ class Deck {
             cards[i] = cards[randCardIndex];
             cards[randCardIndex] = temp;
         }
-
-        Tramp = cards.Last().Suit;
+        
+        Tramp = cards.Last();
     }
 }

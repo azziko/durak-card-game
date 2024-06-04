@@ -43,6 +43,6 @@ class Card{
                 break;
         }
 
-        return $"{val}{suit}";
+        return $"{suit} {val}";
     }
 }
