@@ -17,7 +17,6 @@ partial class Game{
         Tramp = deck.Tramp;
         
         startNewGame();
-        Console.WriteLine(Tramp);
     }
 
     public int GetDeckSize(){
