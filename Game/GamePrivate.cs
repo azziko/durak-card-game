@@ -3,7 +3,7 @@ using Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
+//TODO: player cant attack with more cards than in opponent's hand. 
 namespace Game;
 
 partial class Game{
@@ -135,13 +135,14 @@ partial class Game{
 
             if(wasAttackersTurn){
                 discardPile.AddRange(cardsCleared);
+                refillHands();
                 nextPlayerClockWise(1);
             } else {
                 currentPlayer.AddCards(cardsCleared);
+                refillHands();
                 nextPlayerClockWise(2);
             }
 
-            refillHands();
             checkWinner();
 
             return true;
