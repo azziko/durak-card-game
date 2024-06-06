@@ -11,12 +11,10 @@ class SmartAgent : Player {
     double[] multipleBonus = {0.0, 0.0, 0.5, 0.75, 1.25};
     public override (EPlayerAction, Card?) ChooseMove(Game game) {
         List<Card?> validMoves = game.GetValidMoves();
-        Card? bestMove = null;
-        int currentBest = int.MinValue;
         Bout bout = game.GetBout();
         int deckSize = game.GetDeckSize();
 
-        //Don't attack with trumps unless endgame
+        //Attacking with trumps early game is bad
         if(bout.isAttackersTurn() && bout.AttackingCards.Count > 0){
             if(
                 !validMoves.Any(card => card != null && card.Suit != game.Trump.Suit) &&
@@ -26,7 +24,7 @@ class SmartAgent : Player {
             }
         }
 
-        //Take if opponents gives good cards early
+        //It's beneficial to take good cards early game
         if(!bout.isAttackersTurn() && bout.AttackingCards.Count < 3){
             int boutScore = 0;
             foreach(Card card in bout.AttackingCards){
@@ -44,6 +42,8 @@ class SmartAgent : Player {
             }
         }
 
+        Card? bestMove = null;
+        int currentBest = int.MinValue;
         foreach(Card? move in validMoves){
             if(move == null){
                 continue;
@@ -78,7 +78,7 @@ class SmartAgent : Player {
             cardsBySuit[(int)card.Suit]++;
         }
 
-        // //Bonus for multiple cards of the same value 
+        //Bonus for multiple cards of the same value 
         foreach(ECardValue _val in Enum.GetValues(typeof(ECardValue))){
             eval += (int)_val * (int)multipleBonus[cardsByValue[(int)_val - (int)ECardValue.Six]];
         }

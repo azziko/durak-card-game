@@ -100,8 +100,8 @@ partial class Game{
         List<Card?> validMoves = new List<Card?>{};
 
         if(
-            bout.isAttackersTurn() &&
-            bout.AttackingCards.Count > 0
+            (bout.isAttackersTurn() &&
+            bout.AttackingCards.Count > 0) || !bout.isAttackersTurn()
         ){
             validMoves.Add(null);
         }
