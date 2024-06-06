@@ -6,7 +6,7 @@ using Domain.Enums;
 namespace Game;
 class SmartAgent : Player {
     public override (EPlayerAction, Card?) ChooseMove(Game game) {
-        List<Card> hand = game.GetHandActivePlayer();
+        List<Card?> validMoves = game.GetValidMoves();
         
         return (EPlayerAction.Move, null);
     }

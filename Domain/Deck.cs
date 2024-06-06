@@ -19,7 +19,7 @@ class Deck {
                 cards.Add(new Card(){
                     Suit = _suit,
                     Val = _val,
-                    Score = (int)_val,
+                    Score = ((int)_val * 100) - 800,
                 });
             }
         }
