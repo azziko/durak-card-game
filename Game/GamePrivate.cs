@@ -3,7 +3,7 @@ using Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-//TODO: player cant attack with more cards than in opponent's hand. 
+
 namespace Game;
 
 partial class Game{
@@ -25,6 +25,13 @@ partial class Game{
         }
         
         if(bout.isAttackersTurn()){
+            if(
+                players[(activePlayer+1) % players.Count].GetCards().Count <= 1 && 
+                deck.CardsLeft() != 0
+            ){
+                return (false, "You can't do more attacks!");
+            }
+
             if(bout.AttackingCards.Count == 0){
                 return (true, "");
             } else {

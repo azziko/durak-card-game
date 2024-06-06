@@ -15,7 +15,6 @@ class App{
     }
 
     public void Run(){
-        //TODO: Don't print the board on bots' turn
         view.PrintMessage(Message.Welcome);
 
         while(true){
