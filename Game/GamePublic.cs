@@ -45,6 +45,7 @@ partial class Game{
         } else if(action == EPlayerAction.Restart){
             deck = new Deck();
             bout = new Bout();
+            winner = -1;
         
             startNewGame();
             return action;
@@ -70,7 +71,13 @@ partial class Game{
 
         if(winner > -1){
             Console.WriteLine($"Player {players[winner].GetType()} won!");
-            return EPlayerAction.Exit;
+            deck = new Deck();
+            bout = new Bout();
+            winner = -1;
+        
+            startNewGame();
+
+            return EPlayerAction.Restart;
         }
 
         return action;
@@ -90,6 +97,8 @@ partial class Game{
 
     public List<Card?> GetValidMoves(){
         //null is a valid move and counts as turn skip
+        //TODO: don't add null unless is really valid option
+
         List<Card?> validMoves = new List<Card?>{null};
         Player currentPlayer = bout.isAttackersTurn() ? players[activePlayer] : players[(activePlayer + 1)%players.Count];
 

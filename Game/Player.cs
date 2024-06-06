@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Domain;
 using Domain.Enums;
 
@@ -22,6 +23,10 @@ abstract class Player{
 
     public void AddCards(List<Card> cardsToAdd){
         hand.AddRange(cardsToAdd);
+    }
+
+    public void ClearHand(){
+        hand = new List<Card>();
     }
 
     public bool RemoveCard(Card card){

@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using GameController = Game.Game;
 using ViewController = View.View;
-using Domain.Enums;   
+using Domain.Enums;
+using System.ComponentModel;
 
 namespace App;
 
@@ -16,6 +17,7 @@ class App{
 
     public void Run(){
         view.PrintMessage(Message.Welcome);
+        int count = 100;
 
         while(true){
             Console.Write("Enter command: ");
@@ -34,6 +36,11 @@ class App{
                             return;
                         } else if(action == EPlayerAction.Restart){
                             view.PrintMessage("The game is restarting");
+                            count--;
+
+                            if(count < 0){
+                                return;
+                            }
                         } else if(action == EPlayerAction.Move){
                             view.PrintBoard(game);
                         }

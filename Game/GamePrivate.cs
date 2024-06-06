@@ -77,6 +77,10 @@ partial class Game{
     private void startNewGame(){
         Card? lowestTramp = null;
         for(int i = 0; i < players.Count; i++){
+            players[i].ClearHand();
+        }
+
+        for(int i = 0; i < players.Count; i++){
             players[i].AddCards(deck.Draw(6));
             Card? lowestTrampDealt = players[i].GetCards().Where(card => card.Suit == deck.Tramp.Suit)
                                     .OrderBy(card => card.Val)
@@ -99,8 +103,6 @@ partial class Game{
         if(lowestTramp == null){
             activePlayer = Rand.Next(players.Count);
         }
-
-        
     }
 
     private void refillHands(){
