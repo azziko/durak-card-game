@@ -88,8 +88,10 @@ partial class Game{
                     lowestTrampDealt.Val < lowestTramp.Val
                 ){
                     lowestTramp = lowestTrampDealt;
-                } else {
+                    activePlayer = i;
+                } else if (lowestTramp == null) {
                     lowestTramp = lowestTrampDealt;
+                    activePlayer = i;
                 }
             }
         }
@@ -97,6 +99,8 @@ partial class Game{
         if(lowestTramp == null){
             activePlayer = Rand.Next(players.Count);
         }
+
+        
     }
 
     private void refillHands(){
