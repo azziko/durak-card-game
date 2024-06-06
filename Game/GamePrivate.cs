@@ -47,9 +47,9 @@ partial class Game{
         } else {
             Card cardtoBeat = bout.AttackingCards.Last();
 
-            if(card.Suit == deck.Tramp.Suit){
+            if(card.Suit == deck.Trump.Suit){
                 if(
-                    cardtoBeat.Suit == deck.Tramp.Suit &&
+                    cardtoBeat.Suit == deck.Trump.Suit &&
                     cardtoBeat.Val > card.Val
                 ){
                     return(false, $"{cardtoBeat} is not beatable by {card}");
@@ -57,7 +57,7 @@ partial class Game{
                     return(true, "");
                 }
             } else {
-                if(cardtoBeat.Suit == deck.Tramp.Suit){
+                if(cardtoBeat.Suit == deck.Trump.Suit){
                     return(false, $"{cardtoBeat} is not beatable by {card}");
                 }
 
@@ -75,32 +75,32 @@ partial class Game{
     }
 
     private void startNewGame(){
-        Card? lowestTramp = null;
+        Card? lowestTrump = null;
         for(int i = 0; i < players.Count; i++){
             players[i].ClearHand();
         }
 
         for(int i = 0; i < players.Count; i++){
             players[i].AddCards(deck.Draw(6));
-            Card? lowestTrampDealt = players[i].GetCards().Where(card => card.Suit == deck.Tramp.Suit)
+            Card? lowestTrumpDealt = players[i].GetCards().Where(card => card.Suit == deck.Trump.Suit)
                                     .OrderBy(card => card.Val)
                                     .FirstOrDefault();
 
-            if(lowestTrampDealt != null){
+            if(lowestTrumpDealt != null){
                 if(
-                    lowestTramp != null &&
-                    lowestTrampDealt.Val < lowestTramp.Val
+                    lowestTrump != null &&
+                    lowestTrumpDealt.Val < lowestTrump.Val
                 ){
-                    lowestTramp = lowestTrampDealt;
+                    lowestTrump = lowestTrumpDealt;
                     activePlayer = i;
-                } else if (lowestTramp == null) {
-                    lowestTramp = lowestTrampDealt;
+                } else if (lowestTrump == null) {
+                    lowestTrump = lowestTrumpDealt;
                     activePlayer = i;
                 }
             }
         }
 
-        if(lowestTramp == null){
+        if(lowestTrump == null){
             activePlayer = Rand.Next(players.Count);
         }
     }

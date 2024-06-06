@@ -9,7 +9,7 @@ namespace Domain;
 class Deck {
     private List<Card> cards;
     private Random rand = new Random((int)DateTime.Now.Ticks);
-    public Card Tramp;
+    public Card Trump;
 
     public Deck(){
         cards = new List<Card>();
@@ -48,6 +48,6 @@ class Deck {
             cards[randCardIndex] = temp;
         }
         
-        Tramp = cards.Last();
+        Trump = cards.Last();
     }
 }

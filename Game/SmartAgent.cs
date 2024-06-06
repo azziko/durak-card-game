@@ -6,24 +6,51 @@ using Domain.Enums;
 
 namespace Game;
 class SmartAgent : Player {
-    int trampBonus = 1000;
-    int unbalancedHandPenalty = 200;
-    int handCountPenalty = 300;
+    int TrumpBonus = 1500;
+    int unbalancedHandPenalty = 900;
     double[] multipleBonus = {0.0, 0.0, 0.5, 0.75, 1.25};
     public override (EPlayerAction, Card?) ChooseMove(Game game) {
         List<Card?> validMoves = game.GetValidMoves();
         Card? bestMove = null;
         int currentBest = int.MinValue;
+        Bout bout = game.GetBout();
+        int deckSize = game.GetDeckSize();
 
-        //Todo: Eval skipping too;
+        //Don't attack with trumps unless endgame
+        if(bout.isAttackersTurn() && bout.AttackingCards.Count > 0){
+            if(
+                !validMoves.Any(card => card != null && card.Suit != game.Trump.Suit) &&
+                deckSize > 12
+            ){
+                return(EPlayerAction.Move, null);
+            }
+        }
+
+        //Take if opponents gives good cards early
+        if(!bout.isAttackersTurn() && bout.AttackingCards.Count < 3){
+            int boutScore = 0;
+            foreach(Card card in bout.AttackingCards){
+                boutScore += card.Score;
+                if(card.Suit == game.Trump.Suit){
+                    boutScore += 1500;
+                }
+            }
+
+            if(
+                boutScore >= 1500 &&
+                deckSize > 12
+            ){
+                return(EPlayerAction.Move, null);
+            }
+        }
+
         foreach(Card? move in validMoves){
             if(move == null){
-                //TODO
                 continue;
             }
 
             List<Card> _hand = hand.Where(card => card != move).ToList();
-            int moveEval = evalHand(game.Tramp, game.GetDeckSize(), _hand);
+            int moveEval = evalHand(game.Trump, _hand);
             
             if(moveEval >= currentBest){
                 currentBest = moveEval;
@@ -34,7 +61,7 @@ class SmartAgent : Player {
         return (EPlayerAction.Move, bestMove);
     }
 
-    private int evalHand(Card tramp, int cardsLeft, List<Card> _hand){
+    private int evalHand(Card Trump, List<Card> _hand){
         int eval = 0;
         int[] cardsByValue = new int[(int)ECardValue.Ace - (int)ECardValue.Six + 1]; 
         int[] cardsBySuit = new int[4]; 
@@ -43,40 +70,35 @@ class SmartAgent : Player {
         foreach(Card card in _hand){
             eval += card.Score;
 
-            if(card.Suit == tramp.Suit){
-                eval += trampBonus;
+            if(card.Suit == Trump.Suit){
+                eval += TrumpBonus;
             }
 
             cardsByValue[(int)card.Val - (int)ECardValue.Six]++;
             cardsBySuit[(int)card.Suit]++;
         }
 
-        //Bonus for multiple cards of the same value 
+        // //Bonus for multiple cards of the same value 
         foreach(ECardValue _val in Enum.GetValues(typeof(ECardValue))){
             eval += (int)_val * (int)multipleBonus[cardsByValue[(int)_val - (int)ECardValue.Six]];
         }
 
-        //Penalty for unbalanced non-tramp cards
-        double avgNonTramp = 0;
+        //Penalty for unbalanced non-Trump cards
+        double avgNonTrump = 0;
         foreach(ECardSuit _suit in Enum.GetValues(typeof(ECardSuit))){
-            if(_suit == tramp.Suit)
+            if(_suit == Trump.Suit)
                 continue;
 
-            avgNonTramp += cardsBySuit[(int)_suit];
+            avgNonTrump += cardsBySuit[(int)_suit];
         }
 
-        avgNonTramp /= 3;
+        avgNonTrump /= 3;
         foreach(ECardSuit _suit in Enum.GetValues(typeof(ECardSuit))){
-            if(_suit == tramp.Suit)
+            if(_suit == Trump.Suit)
                 continue;
             
-            double scalar = Math.Abs((cardsBySuit[(int)_suit] - avgNonTramp) / avgNonTramp);
+            double scalar = Math.Abs((cardsBySuit[(int)_suit] - avgNonTrump) / avgNonTrump);
             eval -= (int)(unbalancedHandPenalty * scalar);
-        }
-
-        //Penalty for #cards in hand
-        if(cardsLeft <= 10){
-            eval -= handCountPenalty * _hand.Count;
         }
 
         return eval;

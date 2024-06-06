@@ -8,13 +8,13 @@ namespace Game;
 
 partial class Game{
     public Random Rand = new Random((int)(DateTime.Now.Ticks));
-    public Card Tramp;
+    public Card Trump;
 
     public Game(List<Player> _players){
         players = _players;
         deck = new Deck();
         bout = new Bout();
-        Tramp = deck.Tramp;
+        Trump = deck.Trump;
         
         startNewGame();
     }
@@ -97,9 +97,15 @@ partial class Game{
 
     public List<Card?> GetValidMoves(){
         //null is a valid move and counts as turn skip
-        //TODO: don't add null unless is really valid option
+        List<Card?> validMoves = new List<Card?>{};
 
-        List<Card?> validMoves = new List<Card?>{null};
+        if(
+            bout.isAttackersTurn() &&
+            bout.AttackingCards.Count > 0
+        ){
+            validMoves.Add(null);
+        }
+
         Player currentPlayer = bout.isAttackersTurn() ? players[activePlayer] : players[(activePlayer + 1)%players.Count];
 
         foreach(Card card in currentPlayer.GetCards()){

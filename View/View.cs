@@ -10,13 +10,13 @@ class View{
     public void PrintBoard(Game.Game g){
         if(!g.IsActiveBot()){
             int deckSize = g.GetDeckSize();
-            Card tramp = g.Tramp;
+            Card Trump = g.Trump;
             Bout bout = g.GetBout();
             List<Card> activePlayerHand = g.GetHandActivePlayer(); 
             int cardsOpponentCount = g.CountCardsOpponent();
 
             Console.WriteLine("=========================================");
-            Console.WriteLine("Trump Card: [{0}]", tramp.ToString());
+            Console.WriteLine("Trump Card: [{0}]", Trump.ToString());
             Console.WriteLine("");
             Console.Write("Your Hand: ");
             PrintCardsList(activePlayerHand);

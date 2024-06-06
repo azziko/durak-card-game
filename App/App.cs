@@ -5,6 +5,7 @@ using Domain.Enums;
 using System.ComponentModel;
 
 namespace App;
+//TODO: add bot game simulation command
 
 class App{
     GameController game;
@@ -17,7 +18,7 @@ class App{
 
     public void Run(){
         view.PrintMessage(Message.Welcome);
-        int count = 100;
+        int count = 499;
 
         while(true){
             Console.Write("Enter command: ");
