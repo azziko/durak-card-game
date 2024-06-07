@@ -5,20 +5,19 @@ using Domain.Enums;
 using System.ComponentModel;
 
 namespace App;
-//TODO: add bot game simulation command
-
 class App{
     GameController game;
     ViewController view;
+    int simulations;
 
-    public App(GameController g, ViewController v){
+    public App(GameController g, ViewController v, int s){
         game = g;
         view = v;
+        simulations = s;
     }
 
     public void Run(){
         view.PrintMessage(Message.Welcome);
-        int count = 499;
 
         while(true){
             Console.Write("Enter command: ");
@@ -36,16 +35,19 @@ class App{
                             view.PrintMessage("The game is exited");
                             return;
                         } else if(action == EPlayerAction.Restart){
-                            view.PrintMessage("The game is restarting");
-                            count--;
+                            simulations--;
 
-                            if(count < 0){
+                            if(simulations <= 0){
+                                for(int i = 0; i < game.Winners.Count(); i++){
+                                    view.PrintMessage("=======================================");
+                                    view.PrintMessage($"Player {game.GetPlayerType(i)} won {game.Winners[i]} times");
+                                }
+
                                 return;
                             }
                         } else if(action == EPlayerAction.Move){
                             view.PrintBoard(game);
                         }
-
                     }
                 case "exit":
                     view.PrintMessage("The game is exited");
