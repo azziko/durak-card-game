@@ -3,18 +3,21 @@ using Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security;
 
 namespace Game;
 
 partial class Game{
     public Random Rand = new Random((int)(DateTime.Now.Ticks));
     public Card Trump;
+    public int[] Winners;
 
     public Game(List<Player> _players){
         players = _players;
         deck = new Deck();
         bout = new Bout();
         Trump = deck.Trump;
+        Winners = new int[players.Count];
         
         startNewGame();
     }
@@ -71,6 +74,7 @@ partial class Game{
 
         if(winner > -1){
             Console.WriteLine($"Player {players[winner].GetType()} won!");
+            Winners[winner]++;
             deck = new Deck();
             bout = new Bout();
             winner = -1;
@@ -93,6 +97,10 @@ partial class Game{
         Player opponentPlayer = bout.isAttackersTurn() ? players[(activePlayer + 1)%players.Count] : players[activePlayer];
 
         return opponentPlayer.CountCards();
+    }
+
+    public Type GetPlayerType(int id){
+        return players[id].GetType();
     }
 
     public List<Card?> GetValidMoves(){
