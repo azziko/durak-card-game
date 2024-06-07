@@ -1,6 +1,4 @@
 # Classic Russian card game - Durak
-- [How to start playing](#how-to-start-playing)
-- [For developers](#for-developers)
 
 ## How to start playing:
 - [Game specifications](#game-specifications)
