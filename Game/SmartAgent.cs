@@ -5,7 +5,7 @@ using Domain;
 using Domain.Enums;
 
 namespace Game;
-class SmartAgent : Player {
+class SmartAgent : Agent {
     int TrumpBonus = 1500;
     int unbalancedHandPenalty = 900;
     double[] multipleBonus = {0.0, 0.0, 0.5, 0.75, 1.25};

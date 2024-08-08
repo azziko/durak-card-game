@@ -3,10 +3,7 @@ using Domain;
 using Domain.Enums;
 
 namespace Game;
-class RandomAgent : Player {
-    //Inspired by a good friend of mine, Daniyal 
-    //Nice tabletop playing skills
-
+class RandomAgent : Agent {
     public override (EPlayerAction, Card?) ChooseMove(Game game) {
         List<Card?> validMoves = game.GetValidMoves();
 

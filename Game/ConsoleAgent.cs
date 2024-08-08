@@ -5,7 +5,7 @@ using Domain.Enums;
 
 namespace Game;
 class ConsoleAgent : Player {
-    public override (EPlayerAction, Card?) ChooseMove(Game game) {
+    override public (EPlayerAction, Card?) ChooseMove(Game game) {
         List<Card> hand = game.GetHandActivePlayer();
         while(true){
             Console.Write("Choose a move (#): ");
