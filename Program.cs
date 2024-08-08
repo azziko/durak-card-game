@@ -1,8 +1,4 @@
-﻿using Domain;
-using App;
-using Game;
-using View;
-using System.Collections.Generic;
+﻿using Game;
 
 public class Program(){
     static void Main(string[] args){
