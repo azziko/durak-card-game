@@ -8,7 +8,7 @@ class Card{
     public int Score { get; set; }
 
     public override string ToString(){
-        string val ="";
+        string val;
         string suit ="";
         switch (Suit){
             case ECardSuit.Diamonds:
@@ -25,24 +25,28 @@ class Card{
                 break;
         }
 
-        switch (Val){
-            case ECardValue.Jack:
-                val = "J";
-                break;
-            case ECardValue.Queen:
-                val = "Q";
-                break;
-            case ECardValue.King: 
-                val = "K";
-                break;
-            case ECardValue.Ace:
-                val = "A";
-                break;
-            default:
-                val = ((int)Val).ToString();
-                break;
-        }
+        val = GetCardValueShort();
 
         return $"{suit} {val}";
+    }
+
+    public string GetCardSuitShort(){
+        return Suit switch {
+            ECardSuit.Spades => "S",
+            ECardSuit.Hearts => "H",
+            ECardSuit.Diamonds => "D",
+            ECardSuit.Clubs => "C",
+            _ => "?"
+        };
+    } 
+
+    public string GetCardValueShort(){
+        return Val switch {
+            ECardValue.Ace => "A",
+            ECardValue.King => "K",
+            ECardValue.Queen => "Q",
+            ECardValue.Jack => "J",
+            _ => ((int)Val).ToString()
+        };
     }
 }

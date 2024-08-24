@@ -14,7 +14,8 @@ Currently supported commands:
 To play a card, enter the card's position in hand starting from 1. For example, if your hand looks as follows:
 [♦ 6] [♦ 10] [♥ Q] [♣ K]
 and you want to select [♥ Q], type 3. 
-Alternatively, type 0 to pass on the current action.
+Alternatively, you could type card's value along side the first letter of its suit to play the card.
+For example, 6d, 10D, QH, Kc are all valid selections for the hand above.
 
 Enjoy the game and may the best player win!
 

@@ -28,8 +28,26 @@ class ConsoleAgent : Player {
                     Console.WriteLine($"{cardPos} is not in the range of cards in hand ({1}-{hand.Count})");
                 }
             } else {
+                Card? parseRes = ParseCardInput(input, hand);
+                if(parseRes != null){
+                    return (EPlayerAction.Move, parseRes); 
+                }
+
                 Console.WriteLine($"{input} is not a valid command");
             }
         }
+    }
+
+     private static Card? ParseCardInput(string input, List<Card> hand){
+        input = input.Replace(" ", "").ToLower();
+        foreach(Card card in hand){
+            string abbreviatedCardName = $"{card.GetCardValueShort()}{card.GetCardSuitShort()}".ToLower();
+
+            if (input == abbreviatedCardName){
+                return card;
+            }
+        }
+
+        return null;
     }
 }
